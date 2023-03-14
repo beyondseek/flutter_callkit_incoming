@@ -101,8 +101,6 @@ class CallkitIncomingActivity : Activity() {
     private lateinit var ivDeclineCall: ImageView
     private lateinit var tvDecline: TextView
 
-    private val RECORD_REQUEST_CODE = 101
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
