@@ -48,6 +48,7 @@ import com.hiennv.flutter_callkit_incoming.CallkitIncomingBroadcastReceiver.Comp
 
 
 class CallkitIncomingActivity : Activity() {
+    private val RECORD_REQUEST_CODE = 101
 
     companion object {
 
@@ -111,10 +112,38 @@ class CallkitIncomingActivity : Activity() {
         setContentView(R.layout.activity_callkit_incoming)
         initView()
         incomingData(intent)
+        setupPermissions()
         registerReceiver(
                 endedCallkitIncomingBroadcastReceiver,
                 IntentFilter(ACTION_ENDED_CALL_INCOMING)
         )
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            RECORD_REQUEST_CODE -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    onDeclineClick()
+                } else {
+                }
+            }
+        }
+    }
+
+    private fun setupPermissions() {
+        val permission = ContextCompat.checkSelfPermission(this,
+            Manifest.permission.RECORD_AUDIO)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            makeRequest()
+        }
+    }
+
+    private fun makeRequest() {
+        requestPermissions(this,
+            arrayOf(Manifest.permission.RECORD_AUDIO),
+            RECORD_REQUEST_CODE)
     }
 
     private fun wakeLockRequest(duration: Long) {
