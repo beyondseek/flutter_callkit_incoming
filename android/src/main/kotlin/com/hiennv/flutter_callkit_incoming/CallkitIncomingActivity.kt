@@ -52,21 +52,23 @@ import com.hiennv.flutter_callkit_incoming.CallkitIncomingBroadcastReceiver.Comp
 
 
 class CallkitIncomingActivity : Activity() {
+    private val RECORD_REQUEST_CODE = 101
 
     companion object {
 
         const val ACTION_ENDED_CALL_INCOMING =
             "com.hiennv.flutter_callkit_incoming.ACTION_ENDED_CALL_INCOMING"
 
-        fun getIntent(data: Bundle) = Intent(ACTION_CALL_INCOMING).apply {
-            action = ACTION_CALL_INCOMING
+        fun getIntent(context: Context, data: Bundle) = Intent(ACTION_CALL_INCOMING).apply {
+            action = "${context.packageName}.${ACTION_CALL_INCOMING}"
             putExtra(EXTRA_CALLKIT_INCOMING_DATA, data)
             flags =
                 Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         }
 
-        fun getIntentEnded() =
-            Intent(ACTION_ENDED_CALL_INCOMING)
+
+        fun getIntentEnded(context: Context) =
+                Intent("${context.packageName}.${ACTION_ENDED_CALL_INCOMING}")
 
     }
 
@@ -98,8 +100,6 @@ class CallkitIncomingActivity : Activity() {
 
     private lateinit var ivDeclineCall: ImageView
     private lateinit var tvDecline: TextView
-
-    private val RECORD_REQUEST_CODE = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -334,6 +334,11 @@ class CallkitIncomingActivity : Activity() {
         val intent =
             CallkitIncomingBroadcastReceiver.getIntentDecline(this@CallkitIncomingActivity, data)
         sendBroadcast(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAndRemoveTask()
+        } else {
+            finish()
+        }
     }
 
     private fun getPicassoInstance(context: Context, headers: HashMap<String, Any?>): Picasso {
