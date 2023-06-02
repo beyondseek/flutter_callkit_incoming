@@ -34,11 +34,8 @@ import com.squareup.picasso.OkHttp3Downloader
 import android.view.ViewGroup.MarginLayoutParams
 import android.os.PowerManager
 import android.text.TextUtils
-import android.util.Log
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
-import com.hiennv.flutter_callkit_incoming.CallkitIncomingBroadcastReceiver.Companion.EXTRA_CALLKIT_TEXT_ACCEPT
-import com.hiennv.flutter_callkit_incoming.CallkitIncomingBroadcastReceiver.Companion.EXTRA_CALLKIT_TEXT_DECLINE
 
 
 class CallkitIncomingActivity : Activity() {
